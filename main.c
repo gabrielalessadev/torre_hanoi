@@ -41,10 +41,11 @@ int main() {
 
     int escolha;
     do {
-        printf("\n Menu Torre de Hanoi \n");
+        printf("\n Menu Torre de Hanoi\n");
         printf("1. Novo Jogo\n");
         printf("2. Ver Historico\n");
-        printf("3. Sair\n");
+        printf("3. Buscar no Historico\n");
+        printf("4. Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &escolha);
         while(getchar() != '\n');
@@ -62,12 +63,15 @@ int main() {
                 exibir_historico(inicio_historico);
                 break;
             case 3:
+                buscar_historico(inicio_historico);
+                break;
+            case 4:
                 printf("Ate mais!\n");
                 break;
             default:
                 printf("Opcao invalida.\n");
         }
-    } while (escolha != 3);
+    } while (escolha != 4);
 
     liberar_historico(&inicio_historico);
     return 0;

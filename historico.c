@@ -79,3 +79,31 @@ void liberar_historico(RegistroPartida** inicio_lista) {
     }
     *inicio_lista = NULL;
 }
+void buscar_historico(RegistroPartida* inicio_lista) {
+    if (inicio_lista == NULL) {
+        printf("Nenhum historico para buscar.\n");
+        return;
+    }
+    char nome_busca[TAMANHO_MAX_NOME];
+    printf("Digite o nome do jogador para buscar: ");
+    fgets(nome_busca, sizeof(nome_busca), stdin);
+    nome_busca[strcspn(nome_busca, "\n")] = 0;
+
+    int encontrado = 0;
+    RegistroPartida* atual = inicio_lista;
+    printf("\n Resultados da Busca por '%s'\n", nome_busca);
+    while (atual != NULL) {
+        if (strstr(atual->nome_jogador, nome_busca) != NULL) {
+            char data_str[64];
+            strftime(data_str, sizeof(data_str), "%d/%m/%Y %H:%M:%S", localtime(&atual->data_fim));
+            printf("Jogador: %s, Discos: %d, Movimentos: %d, Data: %s\n",
+                   atual->nome_jogador, atual->num_discos, atual->movimentos, data_str);
+            encontrado = 1;
+        }
+        atual = atual->proximo;
+    }
+    if (!encontrado) {
+        printf("Nenhum registro encontrado.\n");
+    }
+    printf("--------------------------------------\n");
+}

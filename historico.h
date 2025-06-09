@@ -19,5 +19,6 @@ void salvar_historico_em_arquivo(RegistroPartida* inicio_lista);
 void carregar_historico_do_arquivo(RegistroPartida** inicio_lista);
 void exibir_historico(RegistroPartida* inicio_lista);
 void liberar_historico(RegistroPartida** inicio_lista);
+void buscar_historico(RegistroPartida* inicio_lista);
 
 #endif 
