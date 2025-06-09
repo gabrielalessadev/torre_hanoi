@@ -4,6 +4,9 @@
 #include "hanoi.h"
 #include "historico.h"
 
+// gcc -o hanoi_game main.c hanoi.c pilha.c historico.c -Wall -Wextra
+// .\hanoi_game.exe
+
 void rodar_partida(RegistroPartida** inicio_historico, int num_discos) {
     JogoHanoi jogo;
     char nome_jogador[TAMANHO_MAX_NOME];
