@@ -3,32 +3,49 @@
 #include <string.h>
 #include "hanoi.h"
 #include "historico.h"
+#include <ctype.h> 
 
 // gcc -o hanoi_game main.c hanoi.c pilha.c historico.c -Wall -Wextra
 // .\hanoi_game.exe
+
+int char_para_pino(char c) {
+    c = tolower(c);
+    if (c == 'a') return 0;
+    if (c == 'b') return 1;
+    if (c == 'c') return 2;
+    return -1;
+}
 
 void rodar_partida(RegistroPartida** inicio_historico, int num_discos, const char* nome_jogador) {
     JogoHanoi jogo;
     iniciar_jogo(&jogo, num_discos);
 
+    char linha_entrada[20];
+
     while (!verificar_vitoria(&jogo)) {
         exibir_jogo(&jogo);
-        int origem, destino;
-        printf("Mover do pino (0,1,2) para (0,1,2) (ou -1 para reiniciar): ");
-        scanf("%d", &origem);
+        printf("Jogador: %s | Mover de [A,B,C] para [A,B,C] (ex: AB) | 'R' para reiniciar: ", nome_jogador);
 
-        if (origem == -1) {
-            printf("\n Reiniciando a partida! \n");
+        if (fgets(linha_entrada, sizeof(linha_entrada), stdin) == NULL) continue;
+
+        if (tolower(linha_entrada[0]) == 'r') {
+            printf("\n Reiniciando a partida!\n");
             iniciar_jogo(&jogo, num_discos);
-            continue; 
+            continue;
         }
 
-        scanf("%d", &destino);
-        while(getchar() != '\n');
-
-        if (!fazer_movimento(&jogo, origem, destino)) {
-            printf("!!! Movimento invalido. Pressione Enter para tentar novamente. !!!");
-            getchar();
+        char o, d;
+        if (sscanf(linha_entrada, " %c%c", &o, &d) == 2) {
+            int pino_o = char_para_pino(o);
+            int pino_d = char_para_pino(d);
+            if (pino_o == -1 || pino_d == -1) {
+                 printf("Entrada invalida. Use as letras A, B ou C.\n");
+            } else if (!fazer_movimento(&jogo, pino_o, pino_d)) {
+                printf("!!! Movimento invalido. Pressione Enter para continuar. !!!");
+                getchar();
+            }
+        } else {
+            printf("Formato invalido. Digite as duas letras juntas (ex: AC).\n");
         }
     }
 
