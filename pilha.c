@@ -18,7 +18,9 @@ void empilhar(Pilha* p, int tamanho) {
 }
 
 int desempilhar(Pilha* p) {
-    if (esta_vazia(p)) { return -1; }
+    if (esta_vazia(p)) { 
+        return -1; 
+    }
     Disco* temporario = p->topo;
     int tamanho = temporario->tamanho;
     p->topo = p->topo->proximo;

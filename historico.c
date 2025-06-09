@@ -42,6 +42,7 @@ void carregar_historico_do_arquivo(RegistroPartida** inicio_lista) {
         int movimentos, num_discos;
         char nome_jogador[TAMANHO_MAX_NOME];
         long data_fim_long;
+        
         if (sscanf(linha, "%d;%49[^;];%d;%ld", &movimentos, nome_jogador, &num_discos, &data_fim_long) == 4) {
             adicionar_registro(inicio_lista, movimentos, nome_jogador, num_discos);
             if (*inicio_lista != NULL) {
