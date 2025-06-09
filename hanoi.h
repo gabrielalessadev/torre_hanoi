@@ -14,6 +14,7 @@ typedef struct {
 void iniciar_jogo(JogoHanoi* jogo, int num_discos);
 int fazer_movimento(JogoHanoi* jogo, int origem, int destino);
 void exibir_jogo(JogoHanoi* jogo);
-
 int verificar_vitoria(JogoHanoi* jogo);
+void encontrar_prox_movimento_otimo(JogoHanoi* jogo, int* origem, int* destino);
+
 #endif 

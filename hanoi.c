@@ -1,5 +1,6 @@
 #include "hanoi.h"
 #include <stdio.h>
+#include <limits.h> 
 
 void iniciar_jogo(JogoHanoi* jogo, int num_discos) {
     jogo->num_discos = num_discos;
@@ -44,4 +45,15 @@ void exibir_jogo(JogoHanoi* jogo) {
 }
 int verificar_vitoria(JogoHanoi* jogo) {
     return esta_vazia(&jogo->pinos[0]) && esta_vazia(&jogo->pinos[1]);
+}
+
+void encontrar_prox_movimento_otimo(JogoHanoi* jogo, int* origem, int* destino) {
+    int pares_par[3][2] = {{0, 1}, {0, 2}, {1, 2}};
+    int pares_impar[3][2] = {{0, 2}, {0, 1}, {1, 2}};
+    int (*pares)[2] = (jogo->num_discos % 2 == 0) ? pares_par : pares_impar;
+    int p1 = pares[jogo->movimentos % 3][0];
+    int p2 = pares[jogo->movimentos % 3][1];
+    int t1 = esta_vazia(&jogo->pinos[p1]) ? INT_MAX : jogo->pinos[p1].topo->tamanho;
+    int t2 = esta_vazia(&jogo->pinos[p2]) ? INT_MAX : jogo->pinos[p2].topo->tamanho;
+    if (t1 < t2) { *origem = p1; *destino = p2; } else { *origem = p2; *destino = p1; }
 }

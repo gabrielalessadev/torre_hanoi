@@ -16,14 +16,27 @@ int char_para_pino(char c) {
     return -1;
 }
 
+char pino_para_char(int p) {
+    if (p == 0) return 'A'; 
+    if (p == 1) return 'B'; 
+    if (p == 2) return 'C';
+    return '?';
+}
+
 void rodar_partida(RegistroPartida** inicio_historico, int num_discos, const char* nome_jogador) {
     JogoHanoi jogo;
     iniciar_jogo(&jogo, num_discos);
 
     char linha_entrada[20];
+    int pino_sugerido_origem, pino_sugerido_destino;
 
     while (!verificar_vitoria(&jogo)) {
         exibir_jogo(&jogo);
+
+        encontrar_prox_movimento_otimo(&jogo, &pino_sugerido_origem, &pino_sugerido_destino);
+        printf("\nSugestao de jogada: %c -> %c\n", pino_para_char(pino_sugerido_origem),
+        pino_para_char(pino_sugerido_destino));
+
         printf("Jogador: %s | Mover de [A,B,C] para [A,B,C] (ex: AB) | 'R' para reiniciar: ", nome_jogador);
 
         if (fgets(linha_entrada, sizeof(linha_entrada), stdin) == NULL) continue;
