@@ -105,7 +105,34 @@ void exibir_jogo(JogoHanoi* jogo) {
     printf("\n");
 }
 int verificar_vitoria(JogoHanoi* jogo) {
-    return esta_vazia(&jogo->pinos[0]) && esta_vazia(&jogo->pinos[1]);
+    
+    if (!esta_vazia(&jogo->pinos[0])) {
+        return 0; 
+    }
+    if (esta_vazia(&jogo->pinos[1])) {
+        int contador = 0;
+        Disco* atual = jogo->pinos[2].topo; 
+        while (atual != NULL) {
+            contador++;
+            atual = atual->proximo;
+        }
+        if (contador == jogo->num_discos) {
+            return 1; 
+        }
+    }
+
+    if (esta_vazia(&jogo->pinos[2])) {
+        int contador = 0;
+        Disco* atual = jogo->pinos[1].topo; 
+        while (atual != NULL) {
+            contador++;
+            atual = atual->proximo;
+        }
+        if (contador == jogo->num_discos) {
+            return 1; 
+        }
+    }
+    return 0;
 }
 
 void encontrar_prox_movimento_otimo(JogoHanoi* jogo, int* origem, int* destino) {
