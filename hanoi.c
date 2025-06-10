@@ -1,5 +1,6 @@
 #include "hanoi.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h> 
 
 void iniciar_jogo(JogoHanoi* jogo, int num_discos) {

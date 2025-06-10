@@ -45,7 +45,7 @@ void rodar_partida(JogoHanoi* jogo, RegistroPartida** inicio_historico, const ch
         char primeira_letra = tolower(linha_entrada[0]);
 
         if (primeira_letra == 'r') {
-            printf("\n--- Reiniciando a partida! ---\n");
+            printf("\n Reiniciando a partida!\n");
             iniciar_jogo(jogo, num_discos);
             continue;
         }
@@ -63,7 +63,7 @@ void rodar_partida(JogoHanoi* jogo, RegistroPartida** inicio_historico, const ch
             if (pino_origem == -1 || pino_destino == -1) {
                 printf("Entrada invalida. Use as letras A, B ou C para os pinos.\n");
             } else {
-                fazer_movimento(jogo, pino_origem, pino_destino);
+                     fazer_movimento(jogo, pino_origem, pino_destino);
             }
         } else {
              printf("Formato invalido. Digite as duas letras juntas (ex: AC).\n");
@@ -78,13 +78,13 @@ void rodar_partida(JogoHanoi* jogo, RegistroPartida** inicio_historico, const ch
     }
 }
 
-
 int main() {
     JogoHanoi jogo;
     RegistroPartida* inicio_historico = NULL;
     carregar_historico_do_arquivo(&inicio_historico);
 
     int escolha;
+    
     do {
         printf("\n Menu Torre de Hanoi \n");
         printf("1. Novo Jogo\n");
@@ -92,7 +92,6 @@ int main() {
         printf("3. Buscar no Historico\n");
         printf("4. Sair\n");
         printf("Escolha uma opcao: ");
-
         if (scanf("%d", &escolha) != 1) {
             printf("Entrada invalida. Digite um numero.\n");
             int c;
@@ -102,45 +101,43 @@ int main() {
         int c;
         while ((c = getchar()) != '\n' && c != EOF);
 
-        switch(escolha) {
+        switch (escolha) {
             case 1: {
-                int num_discos;
                 char nome_jogador[TAMANHO_MAX_NOME];
-                char escolha_jogar_novamente;
-
                 printf("Digite seu nome: ");
                 fgets(nome_jogador, sizeof(nome_jogador), stdin);
                 nome_jogador[strcspn(nome_jogador, "\n")] = 0;
 
-               printf("Digite o numero de discos (min. 1, max. 10): ");
-                if (scanf("%d", &num_discos) != 1) {
-                    printf("Entrada invalida. Digite um número.\n");
+                for (;;) { 
+                    int num_discos;
+                    printf("\nDigite o numero de discos para esta partida (min. 1, max. 10): ");
+                    if (scanf("%d", &num_discos) != 1) {
+                        printf("Entrada invalida. Digite um numero.\n");
+                        while ((c = getchar()) != '\n' && c != EOF);
+                        continue; 
+                    }
                     while ((c = getchar()) != '\n' && c != EOF);
-                    break;
-                }
-                while ((c = getchar()) != '\n' && c != EOF);
 
-                if (num_discos < 1 || num_discos > 10) {
-                    printf("Numero de discos invalido. Escolha entre 1 e 10.\n");
-                    break;
-                }
-                do {
+                    if (num_discos < 1 || num_discos > 10) {
+                        printf("Numero de discos invalido. Escolha entre 1 e 10.\n");
+                        continue; 
+                    }
+                    
                     iniciar_jogo(&jogo, num_discos);
                     rodar_partida(&jogo, &inicio_historico, nome_jogador, num_discos);
                     
-                    if (verificar_vitoria(&jogo)) {
-                         printf("\nJogar novamente com %d discos? (s/n): ", num_discos);
-                         scanf(" %c", &escolha_jogar_novamente);
-                         while ((c = getchar()) != '\n' && c != EOF);
-                    } else {
-                        escolha_jogar_novamente = 'n';
-                    }
+                    char jogar_novamente;
+                    printf("\nDeseja jogar outra partida? (s/n): ");
+                    scanf(" %c", &jogar_novamente);
+                    while ((c = getchar()) != '\n' && c != EOF);
 
-                } while (escolha_jogar_novamente == 's' || escolha_jogar_novamente == 'S');
-                
+                    if (tolower(jogar_novamente) != 's') {
+                        break; 
+                    }
+                }
                 break;
             }
-             case 2:
+            case 2:
                 exibir_historico(inicio_historico);
                 printf("\nPressione Enter para continuar...");
                 getchar();

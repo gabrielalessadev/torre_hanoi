@@ -67,7 +67,6 @@ void exibir_historico(RegistroPartida* inicio_lista) {
                atual->nome_jogador, atual->num_discos, atual->movimentos, data_str);
         atual = atual->proximo;
     }
-    printf("-----------------------------\n");
 }
 
 void liberar_historico(RegistroPartida** inicio_lista) {
@@ -80,31 +79,76 @@ void liberar_historico(RegistroPartida** inicio_lista) {
     }
     *inicio_lista = NULL;
 }
+
 void buscar_historico(RegistroPartida* inicio_lista) {
     if (inicio_lista == NULL) {
         printf("Nenhum historico para buscar.\n");
         return;
     }
-    char nome_busca[TAMANHO_MAX_NOME];
-    printf("Digite o nome do jogador para buscar: ");
-    fgets(nome_busca, sizeof(nome_busca), stdin);
-    nome_busca[strcspn(nome_busca, "\n")] = 0;
 
-    int encontrado = 0;
+    int escolha;
+    printf("\nBuscar historico por:\n");
+    printf("1. Nome do jogador\n");
+    printf("2. Data (formato DD/MM/AAAA)\n");
+    printf("Escolha uma opcao: ");
+    if (scanf("%d", &escolha) != 1) {
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+        printf("Opcao invalida.\n");
+        return;
+    }
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+
+    char termo_busca[TAMANHO_MAX_NOME];
     RegistroPartida* atual = inicio_lista;
-    printf("\n Resultados da Busca por '%s'\n", nome_busca);
-    while (atual != NULL) {
-        if (strstr(atual->nome_jogador, nome_busca) != NULL) {
-            char data_str[64];
-            strftime(data_str, sizeof(data_str), "%d/%m/%Y %H:%M:%S", localtime(&atual->data_fim));
-            printf("Jogador: %s, Discos: %d, Movimentos: %d, Data: %s\n",
-                   atual->nome_jogador, atual->num_discos, atual->movimentos, data_str);
-            encontrado = 1;
-        }
-        atual = atual->proximo;
+    int encontrado = 0;
+
+    switch (escolha) {
+        case 1:
+            printf("Digite o nome do jogador: ");
+            fgets(termo_busca, sizeof(termo_busca), stdin);
+            termo_busca[strcspn(termo_busca, "\n")] = 0;
+            printf("\n Resultados da Busca por Nome: '%s'\n", termo_busca);
+            while (atual != NULL) {
+                if (strstr(atual->nome_jogador, termo_busca) != NULL) {
+                    char data_str[64];
+                    strftime(data_str, sizeof(data_str), "%d/%m/%Y %H:%M:%S", localtime(&atual->data_fim));
+                    printf("Jogador: %s, Discos: %d, Movimentos: %d, Data/Hora: %s\n",
+                           atual->nome_jogador, atual->num_discos, atual->movimentos, data_str);
+                    encontrado = 1;
+                }
+                atual = atual->proximo;
+            }
+            break;
+
+        case 2:
+            printf("Digite a data (DD/MM/AAAA): ");
+            fgets(termo_busca, sizeof(termo_busca), stdin);
+            termo_busca[strcspn(termo_busca, "\n")] = 0;
+
+            printf("\n Resultados da Busca por Data: '%s'\n", termo_busca);
+            while (atual != NULL) {
+                char data_registro[11];
+                strftime(data_registro, sizeof(data_registro), "%d/%m/%Y", localtime(&atual->data_fim));
+                
+                if (strcmp(data_registro, termo_busca) == 0) {
+                    char data_str_completa[64];
+                    strftime(data_str_completa, sizeof(data_str_completa), "%d/%m/%Y %H:%M:%S", localtime(&atual->data_fim));
+                    printf("Jogador: %s, Discos: %d, Movimentos: %d, Data/Hora: %s\n",
+                           atual->nome_jogador, atual->num_discos, atual->movimentos, data_str_completa);
+                    encontrado = 1;
+                }
+                atual = atual->proximo;
+            }
+            break;
+
+        default:
+            printf("Opcao invalida.\n");
+            break;
     }
+
     if (!encontrado) {
-        printf("Nenhum registro encontrado.\n");
+        printf("Nenhum registro encontrado para a busca.\n");
     }
-    printf("--------------------------------------\n");
 }
